@@ -56,7 +56,9 @@ def unrolllist(d,v,offset=0):
 def typehandle(d,v):
 	form = formatter(d)
 	if isinstance(v, int) or isinstance(v, float): print(f"{form}: {v}"); return
-	if '/api/' in v: return
+	try:
+		if '/api/' in v: return
+	except: return
 	if isinstance(v, str) or isinstance(v, bool): print(f"{form}: {v}"); return
 	if isinstance(v, list):
 		unrolllist(d,v)
@@ -94,7 +96,7 @@ def subbuild(j,pick):
 		if choice >= 0 and choice < c:
 			u = d[choice]
 	except:
-		u = lev1[choice]
+		u = [x['url'] for x in lev1 if x['name'].lower() == choice.lower()][0]
 	r = requests.get(f"{global_url}{u}")
 	j2 = json.loads(r.text)
 	dndprint(j2,pick)
